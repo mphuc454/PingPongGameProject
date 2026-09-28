@@ -22,3 +22,12 @@
     -webkit-transform: scale(1.1) ;
     transform: scale(1.1);
 }
+#main-game{
+    display: grid;
+    grid-template-columns:repeat(10, 60px);
+    grid-template-rows: repeat(20, 60px);
+}
+.matrix-box{
+    border: 1px solid black;
+
+}
