@@ -7,9 +7,8 @@ for (let i = 1; i <= 16 ; i++) {
     }
 }
 const O = [
-    [1,1],
-    [1,1]
-]
+    [   [1,1],
+        [1,1]]]
 const L = [
     [   [0,1,0],
         [0,1,0],
@@ -116,3 +115,6 @@ const Z = [
         [1,1,0],
         [1,0,0]],
 ]
+
+let allPiece = [O,L,J,T,I,S,Z]
+let randomPiece = allPiece[Math.floor(Math.random() * allPiece.length)]
