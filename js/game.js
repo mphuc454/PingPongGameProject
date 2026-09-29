@@ -128,9 +128,29 @@ const drawBox = () => {
     for (let i = 0; i < fallPiece.thePiece.length; i++) {
         for (let j = 0; j < fallPiece.thePiece[i].length ; j++) {
                 if(fallPiece.thePiece[i][j] === 1){
-                    getAllBox[fallPiece.row + i * 10 + fallPiece.col + j].classList.add("piece")
+                    let row = fallPiece.row + i
+                    let col = fallPiece.col + j
+                    getAllBox[ row * 10 + col].classList.add("piece")
                 }
         }
     }
 }
+function eraseBox(){
+    for (let i = 0; i < fallPiece.thePiece.length; i++) {
+        for (let j = 0; j < fallPiece.thePiece[i].length ; j++) {
+            if(fallPiece.thePiece[i][j] === 1){
+                let row = fallPiece.row + i
+                let col = fallPiece.col + j
+                getAllBox[ row * 10 + col].classList.remove("piece")
+            }
+        }
+    }
+}
 drawBox()
+setInterval(
+    () =>{
+        eraseBox()
+        fallPiece.row++
+        drawBox()
+    }, 1000
+)
