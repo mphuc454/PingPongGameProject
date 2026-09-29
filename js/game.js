@@ -115,14 +115,20 @@ const Z = [
         [1,1,0],
         [1,0,0]],
 ]
-
-let allPiece = [O,L,J,T,I,S,Z]
-let randomPiece = allPiece[Math.floor(Math.random() * allPiece.length)]
-const fallPiece = {
-    thePiece : randomPiece[0],
-    row : 0,
-    col: 4
+let broad = []
+for(let i = 0; i < 16; i++){
+    broad.push(new Array(10).fill(0))
 }
+function createPiece(){
+    let allPiece = [O,L,J,T,I,S,Z]
+    let randomPiece = allPiece[Math.floor(Math.random() * allPiece.length)]
+    return {
+        thePiece : randomPiece[0],
+        row : 0,
+        col: 4
+    }
+}
+let fallPiece = createPiece()
 let getAllBox = document.querySelectorAll(".matrix-box")
 const drawBox = () => {
     for (let i = 0; i < fallPiece.thePiece.length; i++) {
@@ -146,11 +152,44 @@ function eraseBox(){
         }
     }
 }
+function checkHitPiece(){
+    for (let i = 0; i < fallPiece.thePiece.length; i++) {
+        for (let j = 0; j < fallPiece.thePiece[i].length ; j++) {
+            if(fallPiece.thePiece[i][j] === 1){
+                let curr = fallPiece.row + i + 1;
+                if(curr >= 16){
+                    return false
+                }
+            }
+        }
+    }
+    return true
+}
+function newPiece(){
+    fallPiece = createPiece()
+}
+function savePiece(){
+    for (let i = 0; i < fallPiece.thePiece.length; i++) {
+        for (let j = 0; j < fallPiece.thePiece[i].length ; j++) {
+            if(fallPiece.thePiece[i][j] === 1){
+                let row = fallPiece.row + i
+                let col = fallPiece.col + j
+                broad[row][col] = 1
+                getAllBox[row * 10 + col].classList.add("piece-save")
+                }
+            }
+        }
+}
 drawBox()
 setInterval(
     () =>{
         eraseBox()
-        fallPiece.row++
+        if(checkHitPiece()){
+            fallPiece.row++
+        }else {
+            savePiece()
+            newPiece()
+        }
         drawBox()
     }, 1000
 )
