@@ -157,7 +157,7 @@ function checkHitPiece(){
         for (let j = 0; j < fallPiece.thePiece[i].length ; j++) {
             if(fallPiece.thePiece[i][j] === 1){
                 let curr = fallPiece.row + i + 1;
-                if(curr >= 16){
+                if(curr >= 16 || broad[curr][fallPiece.col + j] === 1){
                     return false
                 }
             }
