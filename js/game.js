@@ -193,7 +193,7 @@ function createPiece() {
   let randomPiece = allPiece[Math.floor(Math.random() * allPiece.length)];
   return {
     thePiece: randomPiece[0],
-    row: 0,
+    row: nameLevel === "2" ? 16 - randomPiece[0].length : 0,
     col: 4,
   };
 }
@@ -221,12 +221,25 @@ function eraseBox() {
     }
   }
 }
-function checkHitPiece() {
+function checkHitPieceDown() {
   for (let i = 0; i < fallPiece.thePiece.length; i++) {
     for (let j = 0; j < fallPiece.thePiece[i].length; j++) {
       if (fallPiece.thePiece[i][j] === 1) {
         let curr = fallPiece.row + i + 1;
         if (curr >= 16 || broad[curr][fallPiece.col + j] === 1) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+function checkHitPieceUp() {
+  for (let i = 0; i < fallPiece.thePiece.length; i++) {
+    for (let j = 0; j < fallPiece.thePiece[i].length; j++) {
+      if (fallPiece.thePiece[i][j] === 1) {
+        let curr = fallPiece.row + i - 1;
+        if (curr < 0 || broad[curr][fallPiece.col + j] === 1) {
           return false;
         }
       }
@@ -277,14 +290,21 @@ drawBox();
 setTimeout(() => {
   setInterval(() => {
     eraseBox();
-
-    if (checkHitPiece()) {
-      fallPiece.row++;
+    if (nameLevel === "2") {
+      if (checkHitPieceUp()) {
+        fallPiece.row--;
+      } else {
+        savePiece();
+        newPiece();
+      }
     } else {
-      savePiece();
-      newPiece();
+      if (checkHitPieceDown()) {
+        fallPiece.row++;
+      } else {
+        savePiece();
+        newPiece();
+      }
     }
-
     drawBox();
   }, 1000);
 }, 3000);
