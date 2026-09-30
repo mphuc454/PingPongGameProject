@@ -1,0 +1,35 @@
+body {
+  background-image: url("../img/background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0;
+  display: flex;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+.container-intro,
+#intro-title {
+  text-align: center;
+}
+#intro-title {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+.container-intro {
+  background-color: #0f172a;
+  border-radius: 10%;
+  padding: 25px;
+  color: #f8fafc;
+  border: 3px solid yellow;
+}
+#btn-intro {
+  margin-top: 160px;
+}
+.btn {
+  padding: 20px;
+  width: 50%;
+  font-size: 20px;
+}

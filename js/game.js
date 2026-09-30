@@ -23,6 +23,9 @@ window.addEventListener(
   },
   { passive: false },
 );
+const params = new URLSearchParams(window.location.search);
+const nameLevel = params.get("name");
+document.getElementById("name-level").textContent = `LEVEL: ${nameLevel}`;
 
 const O = [
   [
@@ -256,31 +259,32 @@ function canMoveSide(n) {
       }
     }
   }
-  return true;
+  eraseBox();
+  fallPiece.col += n;
+  drawBox();
 }
-function leftOrRight(n) {
-  if (canMoveSide(n)) {
-    eraseBox();
-    fallPiece.col += n;
-    drawBox();
-  }
-}
+
 document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowRight") {
-    leftOrRight(1);
+    canMoveSide(1);
   } else if ((e.key = "ArrowLeft")) {
-    leftOrRight(-1);
+    canMoveSide(-1);
   }
 });
 
 drawBox();
-setInterval(() => {
-  eraseBox();
-  if (checkHitPiece()) {
-    fallPiece.row++;
-  } else {
-    savePiece();
-    newPiece();
-  }
-  drawBox();
-}, 500);
+
+setTimeout(() => {
+  setInterval(() => {
+    eraseBox();
+
+    if (checkHitPiece()) {
+      fallPiece.row++;
+    } else {
+      savePiece();
+      newPiece();
+    }
+
+    drawBox();
+  }, 1000);
+}, 3000);
