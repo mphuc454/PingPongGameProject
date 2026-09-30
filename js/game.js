@@ -6,6 +6,24 @@ for (let i = 1; i <= 16; i++) {
     node.appendChild(createMatrix);
   }
 }
+window.addEventListener("keydown", (e) => {
+  if (
+    e.ctrlKey &&
+    (e.key === "+" || e.key === "-" || e.key === "0" || e.key === "=")
+  ) {
+    e.preventDefault();
+  }
+});
+window.addEventListener(
+  "wheel",
+  (e) => {
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+    }
+  },
+  { passive: false },
+);
+
 const O = [
   [
     [1, 1],
@@ -228,6 +246,33 @@ function savePiece() {
     }
   }
 }
+function canMoveSide(n) {
+  for (let i = 0; i < fallPiece.thePiece.length; i++) {
+    for (let j = 0; j < fallPiece.thePiece[i].length; j++) {
+      if (fallPiece.thePiece[i][j] === 1) {
+        let row = fallPiece.row + i;
+        let col = fallPiece.col + j + n;
+        if (col < 0 || col >= 10 || broad[row][col] === 1) return false;
+      }
+    }
+  }
+  return true;
+}
+function leftOrRight(n) {
+  if (canMoveSide(n)) {
+    eraseBox();
+    fallPiece.col += n;
+    drawBox();
+  }
+}
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") {
+    leftOrRight(1);
+  } else if ((e.key = "ArrowLeft")) {
+    leftOrRight(-1);
+  }
+});
+
 drawBox();
 setInterval(() => {
   eraseBox();
@@ -238,4 +283,4 @@ setInterval(() => {
     newPiece();
   }
   drawBox();
-}, 1000);
+}, 500);
