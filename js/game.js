@@ -187,14 +187,25 @@ const Z = [
     [1, 0, 0],
   ],
 ];
+
 let broad = Array.from({ length: 16 }, () => Array(10).fill(0));
 function createPiece() {
+  const colors = [
+    "#A52A2A",
+    "#0000FF",
+    "#7FFF00",
+    "#DC143C",
+    "#8B008B",
+    "#FF1493",
+    "green",
+  ];
   let allPiece = [O, L, J, T, I, S, Z];
   let randomPiece = allPiece[Math.floor(Math.random() * allPiece.length)];
   return {
     thePiece: randomPiece[0],
     row: nameLevel === "2" ? 16 - randomPiece[0].length : 0,
     col: 4,
+    colors: colors[Math.floor(Math.random() * colors.length)],
   };
 }
 let fallPiece = createPiece();
@@ -205,7 +216,9 @@ const drawBox = () => {
       if (fallPiece.thePiece[i][j] === 1) {
         let row = fallPiece.row + i;
         let col = fallPiece.col + j;
-        getAllBox[row * 10 + col].classList.add("piece");
+        const box = getAllBox[row * 10 + col];
+        box.classList.add("piece");
+        box.style.backgroundColor = fallPiece.colors;
       }
     }
   }
@@ -216,7 +229,9 @@ function eraseBox() {
       if (fallPiece.thePiece[i][j] === 1) {
         let row = fallPiece.row + i;
         let col = fallPiece.col + j;
-        getAllBox[row * 10 + col].classList.remove("piece");
+        const box = getAllBox[row * 10 + col];
+        box.classList.remove("piece");
+        box.style.backgroundColor = null;
       }
     }
   }
@@ -226,7 +241,7 @@ function checkHitPieceDown() {
     for (let j = 0; j < fallPiece.thePiece[i].length; j++) {
       if (fallPiece.thePiece[i][j] === 1) {
         let curr = fallPiece.row + i + 1;
-        if (curr >= 16 || broad[curr][fallPiece.col + j] === 1) {
+        if (curr < 0 || curr >= 16 || broad[curr][fallPiece.col + j] === 1) {
           return false;
         }
       }
@@ -247,6 +262,16 @@ function checkHitPieceUp() {
   }
   return true;
 }
+const checkGameOver = () => {
+  for (let i = 0; i < fallPiece.thePiece.length; i++) {
+    for (let j = 0; j < fallPiece.thePiece[i].length; j++) {
+      if (fallPiece.thePiece[i][j] === 1) {
+        if (fallPiece.row + i <= 0) return true;
+      }
+    }
+  }
+  return false;
+};
 function newPiece() {
   fallPiece = createPiece();
 }
@@ -352,11 +377,15 @@ setTimeout(() => {
       if (checkHitPieceDown()) {
         fallPiece.row++;
       } else {
+        if (checkGameOver()) {
+          alert("Game Over");
+          location.reload();
+        }
         savePiece();
         updateScore();
         newPiece();
       }
     }
     drawBox();
-  }, 300);
+  }, 100);
 }, 100);
