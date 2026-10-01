@@ -276,11 +276,52 @@ function canMoveSide(n) {
   fallPiece.col += n;
   drawBox();
 }
-
+function checkFullRow() {
+  const fullRows = [];
+  for (let index = 0; index < broad.length; index++) {
+    let isFull = true;
+    for (let j = 0; j < broad[index].length; j++) {
+      if (broad[index][j] === 0) {
+        isFull = false;
+        break;
+      }
+    }
+    if (isFull) {
+      fullRows.push(index);
+    }
+  }
+  return fullRows;
+}
+function renderBroad() {
+  for (let index = 0; index < broad.length; index++) {
+    for (let j = 0; j < broad[index].length; j++) {
+      const box = getAllBox[index * 10 + j];
+      box.classList.remove("piece-save");
+      box.classList.toggle("piece-save", broad[index][j] === 1);
+    }
+  }
+}
+function removeFullRows() {
+  const isFullRows = checkFullRow();
+  if (isFullRows.length <= 0) return 0;
+  const kept = [];
+  for (let i = 0; i < broad.length; i++) {
+    if (!isFullRows.includes(i)) {
+      kept.push(broad[i]);
+    }
+  }
+  const empty = [];
+  for (let i = 0; i < isFullRows.length; i++) {
+    empty.push(Array(10).fill(0));
+  }
+  broad = [...empty, ...kept];
+  renderBroad();
+  return isFullRows.length;
+}
 document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowRight") {
     canMoveSide(1);
-  } else if ((e.key = "ArrowLeft")) {
+  } else if (e.key === "ArrowLeft") {
     canMoveSide(-1);
   }
 });
@@ -295,6 +336,7 @@ setTimeout(() => {
         fallPiece.row--;
       } else {
         savePiece();
+        removeFullRows();
         newPiece();
       }
     } else {
@@ -302,9 +344,10 @@ setTimeout(() => {
         fallPiece.row++;
       } else {
         savePiece();
+        removeFullRows();
         newPiece();
       }
     }
     drawBox();
   }, 1000);
-}, 3000);
+}, 100);
