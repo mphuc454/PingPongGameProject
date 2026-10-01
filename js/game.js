@@ -326,6 +326,15 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+let score = 0;
+function updateScore() {
+  const fullRows = removeFullRows();
+  if (fullRows > 0) {
+    score += fullRows * 100;
+    document.getElementById("score-value").textContent = `SCORE: ${score}`;
+  }
+}
+document.getElementById("score-value").textContent = `SCORE: ${score}`;
 drawBox();
 
 setTimeout(() => {
@@ -336,7 +345,7 @@ setTimeout(() => {
         fallPiece.row--;
       } else {
         savePiece();
-        removeFullRows();
+        updateScore();
         newPiece();
       }
     } else {
@@ -344,10 +353,10 @@ setTimeout(() => {
         fallPiece.row++;
       } else {
         savePiece();
-        removeFullRows();
+        updateScore();
         newPiece();
       }
     }
     drawBox();
-  }, 1000);
+  }, 300);
 }, 100);
