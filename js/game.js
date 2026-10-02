@@ -359,6 +359,7 @@ function updateScore() {
     document.getElementById("score-value").textContent = `SCORE: ${score}`;
   }
 }
+const gameOver = new bootstrap.Modal(document.getElementById("gameover"));
 document.getElementById("score-value").textContent = `SCORE: ${score}`;
 drawBox();
 
@@ -378,8 +379,8 @@ setTimeout(() => {
         fallPiece.row++;
       } else {
         if (checkGameOver()) {
-          alert("Game Over");
-          location.reload();
+          gameOver.show();
+          return;
         }
         savePiece();
         updateScore();
