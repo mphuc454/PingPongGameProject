@@ -63,13 +63,14 @@ canvas.addEventListener("mousemove", (e) => {
 function moveBall() {
   balls.x += balls.dx;
   balls.y += balls.dy;
-  if (balls.x < balls.radius || balls.x > canvas.width - balls.radius) {
+  if (balls.x - balls.radius < 0 || balls.x + balls.radius > canvas.width) {
     balls.dx = -balls.dx;
   }
-  if (balls.y < balls.radius || balls.y > canvas.height - balls.radius) {
+  if (balls.y - balls.radius < 0) {
     balls.dy = -balls.dy;
   }
   if (
+    balls.dy > 0 &&
     balls.y + balls.radius >= paddle.y &&
     balls.x >= paddle.x &&
     balls.x < paddle.x + paddle.width
@@ -79,10 +80,10 @@ function moveBall() {
   for (const block of blocks) {
     if (
       block.hp > 0 &&
-      balls.y - balls.radius < block.y + block.height &&
-      balls.x + balls.radius > block.x &&
-      balls.y + balls.radius > block.y &&
-      balls.x - balls.radius < block.x + block.width
+      balls.y - balls.radius <= block.y + block.height &&
+      balls.y + balls.radius >= block.y &&
+      balls.x + balls.radius >= block.x &&
+      balls.x - balls.radius <= block.x + block.width
     ) {
       block.hp = 0;
       balls.dy = -balls.dy;
@@ -98,11 +99,11 @@ const checkGameOver = () => {
 };
 function gameLoop() {
   drawBlocks();
-  moveBall();
   if (checkGameOver()) {
     gameOver.show();
     return;
   }
+  moveBall();
   requestAnimationFrame(gameLoop);
 }
 
