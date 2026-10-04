@@ -1,6 +1,6 @@
 body {
   font-size: 2rem;
-  zoom: 0.65;
+  zoom: 0.8;
 }
 .right-side {
   margin-left: 250px;
@@ -24,19 +24,4 @@ body {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
-}
-#main-game {
-  display: grid;
-  grid-template-columns: repeat(10, 50px);
-  grid-template-rows: repeat(16, 50px);
-  width: auto;
-}
-.matrix-box {
-  border: 1px solid black;
-}
-.piece {
-  background: red;
-}
-.piece-save {
-  background: #008080;
 }

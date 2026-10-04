@@ -1,11 +1,3 @@
-let node = document.getElementById("main-game");
-for (let i = 1; i <= 16; i++) {
-  for (let j = 1; j <= 10; j++) {
-    let createMatrix = document.createElement("div");
-    createMatrix.classList.add("matrix-box");
-    node.appendChild(createMatrix);
-  }
-}
 window.addEventListener("keydown", (e) => {
   if (
     e.ctrlKey &&
@@ -27,366 +19,91 @@ const params = new URLSearchParams(window.location.search);
 const nameLevel = params.get("name");
 document.getElementById("name-level").textContent = `LEVEL: ${nameLevel}`;
 
-const O = [
-  [
-    [1, 1],
-    [1, 1],
-  ],
-];
-const L = [
-  [
-    [0, 1, 0],
-    [0, 1, 0],
-    [0, 1, 1],
-  ],
-
-  [
-    [0, 0, 0],
-    [1, 1, 1],
-    [1, 0, 0],
-  ],
-
-  [
-    [1, 1, 0],
-    [0, 1, 0],
-    [0, 1, 0],
-  ],
-
-  [
-    [0, 0, 1],
-    [1, 1, 1],
-    [0, 0, 0],
-  ],
-];
-const J = [
-  [
-    [0, 1, 0],
-    [0, 1, 0],
-    [1, 1],
-  ],
-
-  [
-    [1, 0, 0],
-    [1, 1, 1],
-    [0, 0, 0],
-  ],
-
-  [
-    [0, 1, 1],
-    [0, 1, 0],
-    [0, 1, 0],
-  ],
-
-  [
-    [0, 0, 0],
-    [1, 1, 1],
-    [0, 0, 1],
-  ],
-];
-const T = [
-  [
-    [1, 1, 1],
-    [0, 1, 0],
-    [0, 1, 0],
-  ],
-
-  [
-    [1, 0, 1],
-    [1, 1, 1],
-    [0, 0, 1],
-  ],
-
-  [
-    [0, 1, 0],
-    [0, 1, 0],
-    [1, 1, 1],
-  ],
-
-  [
-    [1, 0, 0],
-    [1, 1, 1],
-    [1, 0, 0],
-  ],
-];
-const I = [
-  [
-    [0, 0, 0, 0],
-    [1, 1, 1, 1],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-  ],
-
-  [
-    [0, 0, 1, 0],
-    [0, 0, 1, 0],
-    [0, 0, 1, 0],
-    [0, 0, 1, 0],
-  ],
-
-  [
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [1, 1, 1, 1],
-    [0, 0, 0, 0],
-  ],
-
-  [
-    [0, 1, 0, 0],
-    [0, 1, 0, 0],
-    [0, 1, 0, 0],
-    [0, 1, 0, 0],
-  ],
-];
-const S = [
-  [
-    [0, 1, 1],
-    [1, 1, 0],
-    [0, 0, 0],
-  ],
-
-  [
-    [0, 1, 0],
-    [0, 1, 1],
-    [0, 0, 1],
-  ],
-
-  [
-    [0, 0, 0],
-    [0, 1, 1],
-    [1, 1, 0],
-  ],
-
-  [
-    [1, 0, 0],
-    [1, 1, 0],
-    [0, 1, 0],
-  ],
-];
-const Z = [
-  [
-    [1, 1, 0],
-    [0, 1, 1],
-    [0, 0, 0],
-  ],
-
-  [
-    [0, 0, 1],
-    [0, 1, 1],
-    [0, 1, 0],
-  ],
-
-  [
-    [0, 0, 0],
-    [1, 1, 0],
-    [0, 1, 1],
-  ],
-
-  [
-    [0, 1, 0],
-    [1, 1, 0],
-    [1, 0, 0],
-  ],
-];
-
-let broad = Array.from({ length: 16 }, () => Array(10).fill(0));
-function createPiece() {
-  const colors = [
-    "#A52A2A",
-    "#0000FF",
-    "#7FFF00",
-    "#DC143C",
-    "#8B008B",
-    "#FF1493",
-    "green",
-  ];
-  let allPiece = [O, L, J, T, I, S, Z];
-  let randomPiece = allPiece[Math.floor(Math.random() * allPiece.length)];
-  return {
-    thePiece: randomPiece[0],
-    row: nameLevel === "2" ? 16 - randomPiece[0].length : 0,
-    col: 4,
-    colors: colors[Math.floor(Math.random() * colors.length)],
-  };
-}
-let fallPiece = createPiece();
-let getAllBox = document.querySelectorAll(".matrix-box");
-const drawBox = () => {
-  for (let i = 0; i < fallPiece.thePiece.length; i++) {
-    for (let j = 0; j < fallPiece.thePiece[i].length; j++) {
-      if (fallPiece.thePiece[i][j] === 1) {
-        let row = fallPiece.row + i;
-        let col = fallPiece.col + j;
-        const box = getAllBox[row * 10 + col];
-        box.classList.add("piece");
-        box.style.backgroundColor = fallPiece.colors;
-      }
-    }
-  }
-};
-function eraseBox() {
-  for (let i = 0; i < fallPiece.thePiece.length; i++) {
-    for (let j = 0; j < fallPiece.thePiece[i].length; j++) {
-      if (fallPiece.thePiece[i][j] === 1) {
-        let row = fallPiece.row + i;
-        let col = fallPiece.col + j;
-        const box = getAllBox[row * 10 + col];
-        box.classList.remove("piece");
-        box.style.backgroundColor = null;
-      }
-    }
+const canvas = document.getElementById("ping-pong-map");
+const ctx = canvas.getContext("2d");
+let balls = { x: 200, y: 250, radius: 7, dx: 3, dy: -3 };
+let paddle = { x: 160, y: 350, width: 100, height: 30 };
+let blocks = [];
+for (let i = 0; i < 4; i++) {
+  for (let j = 0; j < 8; j++) {
+    blocks.push({
+      x: 15 + j * 55,
+      y: 15 + i * 25,
+      width: 50,
+      height: 20,
+      hp: 1,
+    });
   }
 }
-function checkHitPieceDown() {
-  for (let i = 0; i < fallPiece.thePiece.length; i++) {
-    for (let j = 0; j < fallPiece.thePiece[i].length; j++) {
-      if (fallPiece.thePiece[i][j] === 1) {
-        let curr = fallPiece.row + i + 1;
-        if (curr < 0 || curr >= 16 || broad[curr][fallPiece.col + j] === 1) {
-          return false;
-        }
-      }
-    }
+function drawBlocks() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "red";
+  for (const b of blocks) {
+    if (b.hp > 0) ctx.fillRect(b.x, b.y, b.width, b.height);
   }
-  return true;
+
+  ctx.fillStyle = "black";
+  ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+
+  ctx.fillStyle = "blue";
+  ctx.beginPath();
+  ctx.arc(balls.x, balls.y, balls.radius, 0, Math.PI * 2);
+  ctx.fill();
 }
-function checkHitPieceUp() {
-  for (let i = 0; i < fallPiece.thePiece.length; i++) {
-    for (let j = 0; j < fallPiece.thePiece[i].length; j++) {
-      if (fallPiece.thePiece[i][j] === 1) {
-        let curr = fallPiece.row + i - 1;
-        if (curr < 0 || broad[curr][fallPiece.col + j] === 1) {
-          return false;
-        }
-      }
-    }
-  }
-  return true;
-}
-const checkGameOver = () => {
-  for (let i = 0; i < fallPiece.thePiece.length; i++) {
-    for (let j = 0; j < fallPiece.thePiece[i].length; j++) {
-      if (fallPiece.thePiece[i][j] === 1) {
-        if (fallPiece.row + i <= 0) return true;
-      }
-    }
-  }
-  return false;
-};
-function newPiece() {
-  fallPiece = createPiece();
-}
-function savePiece() {
-  for (let i = 0; i < fallPiece.thePiece.length; i++) {
-    for (let j = 0; j < fallPiece.thePiece[i].length; j++) {
-      if (fallPiece.thePiece[i][j] === 1) {
-        let row = fallPiece.row + i;
-        let col = fallPiece.col + j;
-        broad[row][col] = 1;
-        getAllBox[row * 10 + col].classList.add("piece-save");
-      }
-    }
-  }
-}
-function canMoveSide(n) {
-  for (let i = 0; i < fallPiece.thePiece.length; i++) {
-    for (let j = 0; j < fallPiece.thePiece[i].length; j++) {
-      if (fallPiece.thePiece[i][j] === 1) {
-        let row = fallPiece.row + i;
-        let col = fallPiece.col + j + n;
-        if (col < 0 || col >= 10 || broad[row][col] === 1) return false;
-      }
-    }
-  }
-  eraseBox();
-  fallPiece.col += n;
-  drawBox();
-}
-function checkFullRow() {
-  const fullRows = [];
-  for (let index = 0; index < broad.length; index++) {
-    let isFull = true;
-    for (let j = 0; j < broad[index].length; j++) {
-      if (broad[index][j] === 0) {
-        isFull = false;
-        break;
-      }
-    }
-    if (isFull) {
-      fullRows.push(index);
-    }
-  }
-  return fullRows;
-}
-function renderBroad() {
-  for (let index = 0; index < broad.length; index++) {
-    for (let j = 0; j < broad[index].length; j++) {
-      const box = getAllBox[index * 10 + j];
-      box.classList.remove("piece-save");
-      box.classList.toggle("piece-save", broad[index][j] === 1);
-    }
-  }
-}
-function removeFullRows() {
-  const isFullRows = checkFullRow();
-  if (isFullRows.length <= 0) return 0;
-  const kept = [];
-  for (let i = 0; i < broad.length; i++) {
-    if (!isFullRows.includes(i)) {
-      kept.push(broad[i]);
-    }
-  }
-  const empty = [];
-  for (let i = 0; i < isFullRows.length; i++) {
-    empty.push(Array(10).fill(0));
-  }
-  broad = [...empty, ...kept];
-  renderBroad();
-  return isFullRows.length;
-}
-document.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowRight") {
-    canMoveSide(1);
-  } else if (e.key === "ArrowLeft") {
-    canMoveSide(-1);
-  }
+
+canvas.addEventListener("mousemove", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  paddle.x = Math.max(
+    0,
+    Math.min(mouseX - paddle.width / 2, canvas.width - paddle.width),
+  );
 });
-
-let score = 0;
-function updateScore() {
-  const fullRows = removeFullRows();
-  if (fullRows > 0) {
-    score += fullRows * 100;
-    document.getElementById("score-value").textContent = `SCORE: ${score}`;
+function moveBall() {
+  balls.x += balls.dx;
+  balls.y += balls.dy;
+  if (balls.x < balls.radius || balls.x > canvas.width - balls.radius) {
+    balls.dx = -balls.dx;
+  }
+  if (balls.y < balls.radius || balls.y > canvas.height - balls.radius) {
+    balls.dy = -balls.dy;
+  }
+  if (
+    balls.y + balls.radius >= paddle.y &&
+    balls.x >= paddle.x &&
+    balls.x < paddle.x + paddle.width
+  ) {
+    balls.dy = -Math.abs(balls.dy);
+  }
+  for (const block of blocks) {
+    if (
+      block.hp > 0 &&
+      balls.y - balls.radius < block.y + block.height &&
+      balls.x + balls.radius > block.x &&
+      balls.y + balls.radius > block.y &&
+      balls.x - balls.radius < block.x + block.width
+    ) {
+      block.hp = 0;
+      balls.dy = -balls.dy;
+    }
   }
 }
 const gameOver = new bootstrap.Modal(document.getElementById("gameover"));
-document.getElementById("score-value").textContent = `SCORE: ${score}`;
-drawBox();
+const checkGameOver = () => {
+  if (balls.y + balls.radius > canvas.height) {
+    return true;
+  }
+  return false;
+};
+function gameLoop() {
+  drawBlocks();
+  moveBall();
+  if (checkGameOver()) {
+    gameOver.show();
+    return;
+  }
+  requestAnimationFrame(gameLoop);
+}
 
-setTimeout(() => {
-  setInterval(() => {
-    eraseBox();
-    if (nameLevel === "2") {
-      if (checkHitPieceUp()) {
-        fallPiece.row--;
-      } else {
-        savePiece();
-        updateScore();
-        newPiece();
-      }
-    } else {
-      if (checkHitPieceDown()) {
-        fallPiece.row++;
-      } else {
-        if (checkGameOver()) {
-          gameOver.show();
-          return;
-        }
-        savePiece();
-        updateScore();
-        newPiece();
-      }
-    }
-    drawBox();
-  }, 100);
-}, 100);
+gameLoop();

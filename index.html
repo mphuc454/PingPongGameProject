@@ -18,7 +18,7 @@
   <body>
     <aside class="position-fixed top-0 start-0 vh-100 bg-dark text-white">
       <div class="p-4 border-secondary">
-        <h4 class="mb-0 text-center">GAME TETRIS</h4>
+        <h4 class="mb-0 text-center">GAME PINGPONG</h4>
       </div>
       <nav class="nav flex-column p-3">
         <a href="index.html?name=1" class="nav-link text-light mb-2">
@@ -29,9 +29,6 @@
         </a>
         <a href="index.html?name=3" class="nav-link text-light mb-2">
           Level 3
-        </a>
-        <a href="index.html?name=4" class="nav-link text-light mb-2">
-          Level 4
         </a>
         <a href="introduce.html" class="nav-link text-light mb-2">
           Hướng dẫn
@@ -52,7 +49,14 @@
       </div>
       <div class="container-fluid">
         <div class="col-12 mt-4 d-flex justify-content-center">
-          <div id="main-game"></div>
+          <div id="main-game">
+            <canvas
+              id="ping-pong-map"
+              width="400"
+              height="500"
+              style="border: 2px solid black"
+            ></canvas>
+          </div>
         </div>
       </div>
     </main>
