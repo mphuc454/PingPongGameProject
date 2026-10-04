@@ -119,24 +119,27 @@ function moveBall() {
   if (balls.y - balls.radius < 0) {
     balls.dy = -balls.dy;
   }
-  if (
-    balls.y + balls.radius >= lockedBlock.y &&
-    balls.y - balls.radius < lockedBlock.y &&
-    balls.x + balls.radius >= lockedBlock.x &&
-    balls.x - balls.radius < lockedBlock.x + lockedBlock.width
-  ) {
-    balls.y = lockedBlock.y - balls.radius;
-    balls.dy = -Math.abs(balls.dy);
+  if (nameLevel === "2") {
+    if (
+      balls.y + balls.radius >= lockedBlock.y &&
+      balls.y - balls.radius < lockedBlock.y &&
+      balls.x + balls.radius >= lockedBlock.x &&
+      balls.x - balls.radius < lockedBlock.x + lockedBlock.width
+    ) {
+      balls.y = lockedBlock.y - balls.radius;
+      balls.dy = -Math.abs(balls.dy);
+    }
+    if (
+      balls.y - balls.radius <= lockedBlock.y + lockedBlock.height &&
+      balls.y + balls.radius > lockedBlock.y + lockedBlock.height &&
+      balls.x + balls.radius >= lockedBlock.x &&
+      balls.x - balls.radius < lockedBlock.x + lockedBlock.width
+    ) {
+      balls.y = lockedBlock.y + lockedBlock.height + balls.radius;
+      balls.dy = -balls.dy;
+    }
   }
-  if (
-    balls.y - balls.radius <= lockedBlock.y + lockedBlock.height &&
-    balls.y + balls.radius > lockedBlock.y + lockedBlock.height &&
-    balls.x + balls.radius >= lockedBlock.x &&
-    balls.x - balls.radius < lockedBlock.x + lockedBlock.width
-  ) {
-    balls.y = lockedBlock.y + lockedBlock.height + balls.radius;
-    balls.dy = -balls.dy;
-  }
+
   if (
     balls.y + balls.radius >= paddle.y &&
     balls.y - balls.radius <= paddle.y &&
