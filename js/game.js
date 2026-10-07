@@ -19,6 +19,7 @@ const params = new URLSearchParams(window.location.search);
 const nameLevel = params.get("name");
 document.getElementById("name-level").textContent = `LEVEL: ${nameLevel}`;
 let scoreValue = 0;
+let hp = 0;
 let score = document.getElementById("score-value");
 score.textContent = `Điểm: ${scoreValue}`;
 
@@ -27,6 +28,17 @@ const ctx = canvas.getContext("2d");
 let balls = { x: 200, y: 250, radius: 7, dx: 3, dy: -3 };
 let paddle = { x: 160, y: 350, width: 100, height: 30 };
 let lockedBlock = { x: 150, y: 180, width: 120, height: 20 };
+let listBlocks = [
+    { x: 40, y: 180, width: 80, height: 20 },
+    { x: 160, y: 180, width: 80, height: 20 },
+    { x: 280, y: 180, width: 80, height: 20 },
+  ];
+let doors = [
+  {x:0, y:180 ,width:40, height:20, hp:10},
+  {x:120, y:180 ,width:40, height:20, hp:10},
+  {x:240, y:180 ,width:40, height:20, hp:10},
+  {x:360, y:180 ,width:40, height:20, hp:10},
+]
 let blocks = [];
 for (let i = 0; i < 4; i++) {
   for (let j = 0; j < 8; j++) {
@@ -41,12 +53,41 @@ for (let i = 0; i < 4; i++) {
 }
 function drawBlocks() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
   ctx.fillStyle = "red";
   for (const b of blocks) {
     if (b.hp > 0) ctx.fillRect(b.x, b.y, b.width, b.height);
   }
+if(nameLevel === "3"){
+  for(const b of listBlocks){
+    let grd = ctx.createLinearGradient(
+        b.x,
+        0,
+        b.x + b.width,
+        0,
+    );
+    grd.addColorStop(0, "#667eea");
+    grd.addColorStop(1, "#764ba2");
+    ctx.fillStyle = grd;
+    ctx.fillRect(
+        b.x,
+        b.y,
+        b.width,
+        b.height,
+    );
+    ctx.fillText(
+        d.hp,
+        d.x + d.width / 2,
+        d.y - 5
+    )
+  }
+  for(const d of doors){
+    if( d.hp > 0){
+      ctx.fillStyle = "orange";
+      ctx.fillRect(d.x, d.y, d.width, d.height);
+    }
 
+  }
+}
   ctx.fillStyle = "black";
   ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
 
@@ -119,6 +160,52 @@ function moveBall() {
   if (balls.y - balls.radius < 0) {
     balls.dy = -balls.dy;
   }
+  if(nameLevel === "3"){
+    for(const b of listBlocks) {
+      if (
+          balls.y + balls.radius >= b.y &&
+          balls.y - balls.radius < b.y &&
+          balls.x + balls.radius >= b.x &&
+          balls.x - balls.radius < b.x + b.width
+      ) {
+        balls.y = b.y - balls.radius;
+        balls.dy = -Math.abs(balls.dy);
+      }
+      if (
+          balls.y - balls.radius <= b.y + b.height &&
+          balls.y + balls.radius > b.y + b.height &&
+          balls.x + balls.radius >= b.x &&
+          balls.x - balls.radius < b.x + b.width
+      ) {
+        balls.y = b.y + b.height + balls.radius;
+        balls.dy = -balls.dy;
+      }
+    }
+    for(const d of doors){
+      if (
+          d.hp > 0 &&
+          balls.y + balls.radius >= d.y &&
+          balls.y - balls.radius < d.y &&
+          balls.x + balls.radius >= d.x &&
+          balls.x - balls.radius < d.x + d.width
+      ) {
+        balls.y = d.y - balls.radius;
+        balls.dy = -Math.abs(balls.dy);
+        d.hp--;
+      }
+      if (
+          d.hp > 0 &&
+          balls.y - balls.radius <= d.y + d.height &&
+          balls.y + balls.radius > d.y + d.height &&
+          balls.x + balls.radius >= d.x &&
+          balls.x - balls.radius < d.x + d.width
+      ) {
+        balls.y = d.y + d.height + balls.radius;
+        balls.dy = -balls.dy;
+        d.hp--;
+      }
+    }
+  }
   if (nameLevel === "2") {
     if (
       balls.y + balls.radius >= lockedBlock.y &&
@@ -178,7 +265,7 @@ function gameLoop() {
       gameOver.show();
       return;
     }
-  } else if (nameLevel === "1") {
+  } else if (nameLevel === "1" || nameLevel === "3") {
     drawBlocks();
     if (checkGameOver()) {
       gameOver.show();
