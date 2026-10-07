@@ -19,7 +19,6 @@ const params = new URLSearchParams(window.location.search);
 const nameLevel = params.get("name");
 document.getElementById("name-level").textContent = `LEVEL: ${nameLevel}`;
 let scoreValue = 0;
-let hp = 0;
 let score = document.getElementById("score-value");
 score.textContent = `Điểm: ${scoreValue}`;
 
@@ -170,14 +169,27 @@ function moveBall() {
     for (const d of doors) {
       if (
         d.hp > 0 &&
+        balls.dy > 0 &&
+        balls.y + balls.radius >= d.y &&
+        balls.y - balls.radius < d.y &&
+        balls.x + balls.radius >= d.x &&
+        balls.x - balls.radius < d.x + d.width
+      ) {
+        balls.y = d.y - balls.radius;
+        d.hp--;
+        balls.dy = -Math.abs(balls.dy);
+      }
+      if (
+        d.hp > 0 &&
+        balls.dy < 0 &&
         balls.y - balls.radius <= d.y + d.height &&
         balls.y + balls.radius > d.y + d.height &&
         balls.x + balls.radius >= d.x &&
         balls.x - balls.radius < d.x + d.width
       ) {
         balls.y = d.y + d.height + balls.radius;
-        balls.dy = -balls.dy;
         d.hp--;
+        balls.dy = -balls.dy;
       }
     }
   }
