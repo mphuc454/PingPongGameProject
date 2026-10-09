@@ -21,6 +21,17 @@ document.getElementById("next-level").addEventListener("click", () => {
     location.href = `index.html?name=${nextLevel}`;
   }
 })
+let isPause = false
+let pause = document.getElementById("btn-pause")
+pause.addEventListener("click", () => {
+  isPause = !isPause;
+  if(isPause){
+    pause.textContent = "Tiếp tục"
+  }else {
+    pause.textContent = "Tạm dừng"
+    requestAnimationFrame(gameLoop)
+  }
+})
 let scoreValue = 0;
 let score = document.getElementById("score-value");
 score.textContent = `Điểm: ${scoreValue}`;
@@ -238,6 +249,9 @@ function checkGameOver ()  {
 
 };
 function gameLoop() {
+  if(isPause){
+    return;
+  }
   drawBlocks();
     if (checkGameOver()) {
       gameOver.show();
