@@ -5,7 +5,9 @@ import {
   listLockedBlocks,
   doors,
   blocks,
-  boss, paddle as b
+  boss,
+  paddle as b,
+  lockedBlock2,
 } from "./component.js";
 import "./events.js";
 
@@ -15,74 +17,100 @@ document.getElementById("name-level").textContent = `LEVEL: ${nameLevel}`;
 document.getElementById("level-name").textContent = `LEVEL: ${nameLevel}`;
 document.getElementById("next-level").addEventListener("click", () => {
   let nextLevel = Number(nameLevel) + 1;
-  if(nextLevel >= 4){
-    location.href = "index.html?name=1"
-  }else {
+  if (nextLevel >= 4) {
+    location.href = "index.html?name=1";
+  } else {
     location.href = `index.html?name=${nextLevel}`;
   }
-})
-let isPause = false
-let pause = document.getElementById("btn-pause")
+});
+let isPause = false;
+let pause = document.getElementById("btn-pause");
 pause.addEventListener("click", () => {
   isPause = !isPause;
-  if(isPause){
-    pause.textContent = "Tiếp tục"
-  }else {
-    pause.textContent = "Tạm dừng"
-    requestAnimationFrame(gameLoop)
+  if (isPause) {
+    pause.textContent = "Tiếp tục";
+  } else {
+    pause.textContent = "Tạm dừng";
+    requestAnimationFrame(gameLoop);
   }
-})
+});
 let scoreValue = 0;
 let score = document.getElementById("score-value");
 score.textContent = `Điểm: ${scoreValue}`;
 
 const canvas = document.getElementById("ping-pong-map");
 const ctx = canvas.getContext("2d");
+let dx_lockedBlock = 3;
 
 function drawBlocks() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.save();
+  if (nameLevel === "4") {
+    ctx.translate(canvas.width, canvas.height);
+    ctx.rotate(Math.PI);
+    let grd = ctx.createLinearGradient(
+      lockedBlock2.x,
+      0,
+      lockedBlock2.x + lockedBlock2.width,
+      0,
+    );
+    grd.addColorStop(0, "#667eea");
+    grd.addColorStop(1, "#764ba2");
 
-  if(nameLevel === "2"|| nameLevel === "4"){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = grd;
+    ctx.fillRect(
+      lockedBlock2.x,
+      lockedBlock2.y,
+      lockedBlock2.width,
+      lockedBlock2.height,
+    );
+    lockedBlock2.x += dx_lockedBlock;
+    if (
+      lockedBlock2.x + lockedBlock2.width >= canvas.width ||
+      lockedBlock2.x <= 0
+    ) {
+      dx_lockedBlock = -dx_lockedBlock;
+    }
+  }
+  if (nameLevel === "2") {
     ctx.translate(canvas.width, canvas.height);
     ctx.rotate(Math.PI);
 
-    if(nameLevel !== "4"){
-      let grd = ctx.createLinearGradient(
-          lockedBlock.x,
-          0,
-          lockedBlock.x + lockedBlock.width,
-          0,
-      );
-      grd.addColorStop(0, "#667eea");
-      grd.addColorStop(1, "#764ba2");
-      ctx.fillStyle = grd;
-      ctx.fillRect(
-          lockedBlock.x,
-          lockedBlock.y,
-          lockedBlock.width,
-          lockedBlock.height,
-      );
+    let grd = ctx.createLinearGradient(
+      lockedBlock.x,
+      0,
+      lockedBlock.x + lockedBlock.width,
+      0,
+    );
+    grd.addColorStop(0, "#667eea");
+    grd.addColorStop(1, "#764ba2");
+    ctx.fillStyle = grd;
+    ctx.fillRect(
+      lockedBlock.x,
+      lockedBlock.y,
+      lockedBlock.width,
+      lockedBlock.height,
+    );
+  }
+  if (nameLevel !== "4") {
+    ctx.fillStyle = "red";
+    for (const b of blocks) {
+      if (b.hp > 0) ctx.fillRect(b.x, b.y, b.width, b.height);
     }
   }
-if(nameLevel !== "4"){
-  ctx.fillStyle = "red";
-  for (const b of blocks) {
-    if (b.hp > 0) ctx.fillRect(b.x, b.y, b.width, b.height);
+  if (nameLevel === "4" && boss.hp > 0) {
+    ctx.fillStyle = "#FF0000";
+    ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
+    ctx.save();
+    ctx.translate(boss.x + boss.width / 2, boss.y + boss.height / 2);
+    ctx.rotate(Math.PI);
+    ctx.fillStyle = "white";
+    ctx.font = "20px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(String(boss.hp), 0, 0);
+    ctx.restore();
   }
-}
-if(nameLevel === "4" && boss.hp > 0){
-  ctx.fillStyle = "#FF0000";
-  ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
-  ctx.save();
-  ctx.translate(boss.x + boss.width / 2, boss.y + boss.height / 2);
-  ctx.rotate(Math.PI);
-  ctx.fillStyle = "white";
-  ctx.font = "20px Arial";
-  ctx.textAlign = "center";
-  ctx.fillText(String(boss.hp), 0, 0)
-  ctx.restore();
-}
   if (nameLevel === "3") {
     for (const b of listLockedBlocks) {
       let grd = ctx.createLinearGradient(b.x, 0, b.x + b.width, 0);
@@ -111,7 +139,7 @@ if(nameLevel === "4" && boss.hp > 0){
   window.addEventListener("mousemove", (e) => {
     const rect = canvas.getBoundingClientRect();
     let mouseX = e.clientX - rect.left;
-    if(nameLevel === "2" || nameLevel === "4"){
+    if (nameLevel === "2" || nameLevel === "4") {
       mouseX = canvas.width - mouseX;
     }
     paddle.x = Math.max(
@@ -120,7 +148,6 @@ if(nameLevel === "4" && boss.hp > 0){
     );
   });
   ctx.restore();
-
 }
 
 function moveBall() {
@@ -210,14 +237,14 @@ function moveBall() {
     balls.y = paddle.y - balls.radius;
     balls.dy = -Math.abs(balls.dy);
   }
-  if(nameLevel !== "4"){
+  if (nameLevel !== "4") {
     for (const block of blocks) {
       if (
-          block.hp > 0 &&
-          balls.y - balls.radius <= block.y + block.height &&
-          balls.y + balls.radius >= block.y &&
-          balls.x + balls.radius >= block.x &&
-          balls.x - balls.radius <= block.x + block.width
+        block.hp > 0 &&
+        balls.y - balls.radius <= block.y + block.height &&
+        balls.y + balls.radius >= block.y &&
+        balls.x + balls.radius >= block.x &&
+        balls.x - balls.radius <= block.x + block.width
       ) {
         block.hp = 0;
         balls.dy = -balls.dy;
@@ -225,18 +252,45 @@ function moveBall() {
         score.textContent = `Điểm: ${scoreValue}`;
       }
     }
-
   }
-  if(nameLevel === "4"){
+  if (nameLevel === "4") {
     if (
-        boss.hp > 0 &&
-        balls.dy < 0 &&
-        balls.y - balls.radius <= boss.y + boss.height &&
-        balls.x + balls.radius >= boss.x &&
-        balls.x - balls.radius < boss.x + boss.width
+      boss.hp > 0 &&
+      balls.dy < 0 &&
+      balls.y - balls.radius <= boss.y + boss.height &&
+      balls.x + balls.radius >= boss.x &&
+      balls.x - balls.radius < boss.x + boss.width
     ) {
       balls.y = boss.y + boss.height + balls.radius;
       boss.hp--;
+      balls.dy = -balls.dy;
+    }
+    if (
+      balls.dy < 0 &&
+      balls.y - balls.radius <= boss.y + boss.height &&
+      balls.x + balls.radius >= boss.x &&
+      balls.x - balls.radius < boss.x + boss.width
+    ) {
+      balls.y = boss.y + boss.height + balls.radius;
+      boss.hp--;
+      balls.dy = -balls.dy;
+    }
+    if (
+      balls.y + balls.radius >= lockedBlock2.y &&
+      balls.y - balls.radius < lockedBlock2.y &&
+      balls.x + balls.radius >= lockedBlock2.x &&
+      balls.x - balls.radius < lockedBlock2.x + lockedBlock2.width
+    ) {
+      balls.y = lockedBlock2.y - balls.radius;
+      balls.dy = -Math.abs(balls.dy);
+    }
+    if (
+      balls.y - balls.radius <= lockedBlock2.y + lockedBlock2.height &&
+      balls.y + balls.radius > lockedBlock2.y + lockedBlock2.height &&
+      balls.x + balls.radius >= lockedBlock2.x &&
+      balls.x - balls.radius < lockedBlock2.x + lockedBlock2.width
+    ) {
+      balls.y = lockedBlock2.y + lockedBlock2.height + balls.radius;
       balls.dy = -balls.dy;
     }
   }
@@ -244,23 +298,22 @@ function moveBall() {
 const gameOver = new bootstrap.Modal(document.getElementById("gameover"));
 const gameWinner = new bootstrap.Modal(document.getElementById("winner"));
 
-function checkGameOver ()  {
+function checkGameOver() {
   if (balls.y + balls.radius > canvas.height) return true;
-
-};
+}
 function gameLoop() {
-  if(isPause){
+  if (isPause) {
     return;
   }
   drawBlocks();
-    if (checkGameOver()) {
-      gameOver.show();
-      return;
-    }
-    if(scoreValue >= 300 || boss.hp <= 0){
-      gameWinner.show();
-      return;
-    }
+  if (checkGameOver()) {
+    gameOver.show();
+    return;
+  }
+  if (scoreValue >= 300 || boss.hp <= 0) {
+    gameWinner.show();
+    return;
+  }
   moveBall();
   requestAnimationFrame(gameLoop);
 }
