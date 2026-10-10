@@ -5,7 +5,6 @@ import {
   listLockedBlocks,
   doors,
   blocks,
-  boss,
   paddle as b,
   lockedBlock2,
 } from "./component.js";
@@ -40,7 +39,7 @@ score.textContent = `Điểm: ${scoreValue}`;
 
 const canvas = document.getElementById("ping-pong-map");
 const ctx = canvas.getContext("2d");
-let dx_lockedBlock = 3;
+let dx_lockedBlock = 6;
 
 function drawBlocks() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -93,24 +92,11 @@ function drawBlocks() {
       lockedBlock.height,
     );
   }
-  if (nameLevel !== "4") {
-    ctx.fillStyle = "red";
-    for (const b of blocks) {
-      if (b.hp > 0) ctx.fillRect(b.x, b.y, b.width, b.height);
-    }
+  ctx.fillStyle = "red";
+  for (const b of blocks) {
+    if (b.hp > 0) ctx.fillRect(b.x, b.y, b.width, b.height);
   }
-  if (nameLevel === "4" && boss.hp > 0) {
-    ctx.fillStyle = "#FF0000";
-    ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
-    ctx.save();
-    ctx.translate(boss.x + boss.width / 2, boss.y + boss.height / 2);
-    ctx.rotate(Math.PI);
-    ctx.fillStyle = "white";
-    ctx.font = "20px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText(String(boss.hp), 0, 0);
-    ctx.restore();
-  }
+
   if (nameLevel === "3") {
     for (const b of listLockedBlocks) {
       let grd = ctx.createLinearGradient(b.x, 0, b.x + b.width, 0);
@@ -237,44 +223,22 @@ function moveBall() {
     balls.y = paddle.y - balls.radius;
     balls.dy = -Math.abs(balls.dy);
   }
-  if (nameLevel !== "4") {
-    for (const block of blocks) {
-      if (
-        block.hp > 0 &&
-        balls.y - balls.radius <= block.y + block.height &&
-        balls.y + balls.radius >= block.y &&
-        balls.x + balls.radius >= block.x &&
-        balls.x - balls.radius <= block.x + block.width
-      ) {
-        block.hp = 0;
-        balls.dy = -balls.dy;
-        scoreValue += 10;
-        score.textContent = `Điểm: ${scoreValue}`;
-      }
+  for (const block of blocks) {
+    if (
+      block.hp > 0 &&
+      balls.y - balls.radius <= block.y + block.height &&
+      balls.y + balls.radius >= block.y &&
+      balls.x + balls.radius >= block.x &&
+      balls.x - balls.radius <= block.x + block.width
+    ) {
+      block.hp = 0;
+      balls.dy = -balls.dy;
+      scoreValue = Math.min(scoreValue + 10, 300);
+      score.textContent = `Điểm: ${scoreValue}`;
     }
   }
+
   if (nameLevel === "4") {
-    if (
-      boss.hp > 0 &&
-      balls.dy < 0 &&
-      balls.y - balls.radius <= boss.y + boss.height &&
-      balls.x + balls.radius >= boss.x &&
-      balls.x - balls.radius < boss.x + boss.width
-    ) {
-      balls.y = boss.y + boss.height + balls.radius;
-      boss.hp--;
-      balls.dy = -balls.dy;
-    }
-    if (
-      balls.dy < 0 &&
-      balls.y - balls.radius <= boss.y + boss.height &&
-      balls.x + balls.radius >= boss.x &&
-      balls.x - balls.radius < boss.x + boss.width
-    ) {
-      balls.y = boss.y + boss.height + balls.radius;
-      boss.hp--;
-      balls.dy = -balls.dy;
-    }
     if (
       balls.y + balls.radius >= lockedBlock2.y &&
       balls.y - balls.radius < lockedBlock2.y &&
@@ -310,7 +274,7 @@ function gameLoop() {
     gameOver.show();
     return;
   }
-  if (scoreValue >= 300 || boss.hp <= 0) {
+  if (scoreValue >= 300) {
     gameWinner.show();
     return;
   }
