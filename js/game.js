@@ -44,9 +44,12 @@ for (let i = 0; i < 4; i++) {
 }
 const params = new URLSearchParams(window.location.search);
 const nameLevel = params.get("name");
+
+// Hiển thị tên level ở màn hình chính
 document.getElementById("name-level").textContent = `LEVEL: ${nameLevel}`;
-document.getElementById("level-name").textContent = `LEVEL: ${nameLevel}`;
-document.getElementById("next-level").addEventListener("click", () => {
+
+// Chuyển sang màn kế tiếp
+document.getElementById("next-level")?.addEventListener("click", () => {
   let nextLevel = Number(nameLevel) + 1;
   if (nextLevel >= 4) {
     location.href = "index.html?name=1";
@@ -293,7 +296,7 @@ function moveBall() {
 }
 const gameOver = new bootstrap.Modal(document.getElementById("gameover"));
 const gameWinner = new bootstrap.Modal(document.getElementById("winner"));
-
+const timeDown = new bootstrap.Modal(document.getElementById("countdown"));
 function checkGameOver() {
   if (balls.y + balls.radius > canvas.height) return true;
 }
@@ -313,5 +316,18 @@ function gameLoop() {
   moveBall();
   requestAnimationFrame(gameLoop);
 }
+let getCountDown = document.getElementById("time-down");
 
-gameLoop();
+let countdown = 5;
+function countDown() {
+  if (countdown > 0) {
+    getCountDown.textContent = countdown;
+    countdown--;
+    setTimeout(countDown, 1000);
+  } else {
+    timeDown.hide();
+    gameLoop();
+  }
+}
+timeDown.show();
+countDown();
