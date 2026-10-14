@@ -52,9 +52,9 @@ document.getElementById("name-level").textContent = `LEVEL: ${nameLevel}`;
 document.getElementById("next-level")?.addEventListener("click", () => {
   let nextLevel = Number(nameLevel) + 1;
   if (nextLevel >= 4) {
-    location.href = "index.html?name=1";
+    location.href = "main.html?name=1";
   } else {
-    location.href = `index.html?name=${nextLevel}`;
+    location.href = `main.html?name=${nextLevel}`;
   }
 });
 let isPause = false;
