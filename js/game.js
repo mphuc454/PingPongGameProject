@@ -25,10 +25,10 @@ let listLockedBlocks = [
   { x: 280, y: 180, width: 80, height: 20 },
 ];
 let doors = [
-  { x: 0, y: 180, width: 40, height: 20, hp: 8 },
-  { x: 120, y: 180, width: 40, height: 20, hp: 8 },
-  { x: 240, y: 180, width: 40, height: 20, hp: 8 },
-  { x: 360, y: 180, width: 40, height: 20, hp: 8 },
+  { x: 0, y: 180, width: 40, height: 20, hp: 5 },
+  { x: 120, y: 180, width: 40, height: 20, hp: 5 },
+  { x: 240, y: 180, width: 40, height: 20, hp: 5 },
+  { x: 360, y: 180, width: 40, height: 20, hp: 5 },
 ];
 let blocks = [];
 for (let i = 0; i < 4; i++) {
@@ -45,10 +45,11 @@ for (let i = 0; i < 4; i++) {
 const params = new URLSearchParams(window.location.search);
 const nameLevel = params.get("name");
 
-// Hiển thị tên level ở màn hình chính
 document.getElementById("name-level").textContent = `LEVEL: ${nameLevel}`;
-
-// Chuyển sang màn kế tiếp
+let changeTextBtn = document.getElementById("next-level");
+if(Number(nameLevel) >= 4){
+  changeTextBtn.textContent = "Quay lại màn 1"
+}
 document.getElementById("next-level")?.addEventListener("click", () => {
   let nextLevel = Number(nameLevel) + 1;
   if (nextLevel >= 4) {
