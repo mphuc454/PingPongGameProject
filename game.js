@@ -61,6 +61,10 @@ let countdown = 3;
 const gameOver = new bootstrap.Modal(document.getElementById("gameover"));
 const gameWinner = new bootstrap.Modal(document.getElementById("winner"));
 const timeDown = new bootstrap.Modal(document.getElementById("countdown"));
+const introduce = new bootstrap.Modal(
+  document.getElementById("introduce-game"),
+);
+const info = new bootstrap.Modal(document.getElementById("info-game"));
 
 getIntro.hidden = false;
 getGamePlay.hidden = true;
@@ -73,7 +77,7 @@ if (nameLevel !== null) {
   getIntro.hidden = !getIntro.hidden;
   getGamePlay.hidden = !getGamePlay.hidden;
   getSidebar.hidden = !getSidebar.hidden;
-  document.getElementById("name-level").textContent = `LEVEL: ${nameLevel}`;
+  document.getElementById("name-level").textContent = `LEVEL ${nameLevel}`;
   if (Number(nameLevel) >= 4) {
     changeTextBtn.textContent = "Quay lại màn 1";
   }
@@ -85,18 +89,27 @@ if (nameLevel !== null) {
       location.href = `index.html?name=${nextLevel}`;
     }
   });
-
+  document.getElementById("introduce").addEventListener("click", () => {
+    isPause = !isPause;
+    pause.textContent = "RESUME";
+    introduce.show();
+  });
+  document.getElementById("info").addEventListener("click", () => {
+    isPause = !isPause;
+    pause.textContent = "RESUME";
+    info.show();
+  });
   pause.addEventListener("click", () => {
     isPause = !isPause;
     if (isPause) {
-      pause.textContent = "Tiếp tục";
+      pause.textContent = "RESUME";
     } else {
-      pause.textContent = "Tạm dừng";
+      pause.textContent = "PAUSE";
       requestAnimationFrame(gameLoop);
     }
   });
 
-  score.textContent = `Điểm: ${scoreValue}`;
+  score.textContent = `Điểm ${scoreValue}`;
 
   const canvas = document.getElementById("ping-pong-map");
   const ctx = canvas.getContext("2d");
@@ -294,7 +307,7 @@ if (nameLevel !== null) {
         block.hp = 0;
         balls.dy = -balls.dy;
         scoreValue = Math.min(scoreValue + 10, 300);
-        score.textContent = `Điểm: ${scoreValue}`;
+        score.textContent = `Điểm ${scoreValue}`;
       }
     }
 

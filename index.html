@@ -25,7 +25,7 @@
         margin-top: 1%;
       }
       .btn-play {
-        width: 160px;
+        width: 100px;
         padding: 10px;
         text-transform: uppercase;
         font-weight: bold;
@@ -81,7 +81,6 @@
     <aside
       class="position-fixed top-0 start-0 vh-100 bg-dark text-white"
       id="sidebar-menu"
-      hidden
     >
       <div class="p-4 border-secondary">
         <h4 class="mb-0 text-center">GAME PINGPONG</h4>
@@ -99,12 +98,15 @@
         <a href="index.html?name=4" class="nav-link text-light mb-2">
           Level 4
         </a>
-        <a href="introduce.html" class="nav-link text-light mb-2">
+        <button class="mb-4 btn btn-success fw-bold" id="introduce">
           Hướng dẫn trò chơi
-        </a>
+        </button>
+        <button class="btn btn-info fw-bold" id="info">
+          Thông tin trò chơi
+        </button>
       </nav>
     </aside>
-    <main class="right-side" id="game-play" hidden>
+    <main class="right-side" id="game-play">
       <div class="container-lg d-flex justify-content-center">
         <div class="row title-game text-center w-100">
           <div class="col" id="name-level"></div>
@@ -114,7 +116,7 @@
               type="button"
               class="btn btn-secondary btn-play"
             >
-              Tạm dừng
+              PAUSE
             </button>
           </div>
           <div class="col" id="score-value"></div>
@@ -186,6 +188,101 @@
           <div class="modal-body d-flex justify-content-center gap-2">
             <p>Trò chơi bắt đầu:</p>
             <p id="time-down"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal"
+      tabindex="-1"
+      id="introduce-game"
+      data-bs-backdrop="false"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Hướng dẫn chơi</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              <strong>Sử dụng:</strong> Dùng chuột di chuyển thanh hứng bóng từ
+              trái qua phải và ngược lại.
+            </p>
+            <p>
+              <strong>Mục tiêu: </strong> Game này có tổng cộng có 4 màn chơi và
+              nhiệm vụ của bạn phải phá hủy tất cả các viên gạch, tích lũy điểm
+              số và chinh phục các màn chơi với độ khó tăng dần.
+            </p>
+            <p>
+              <strong>Level 1: </strong> Bạn chỉ cần đẩy bóng lên và phá gạch và
+              miễn bóng không rơi xuống vực nếu không game sẽ kết thúc.
+            </p>
+            <p>
+              <strong>Level 2: </strong> Màn hình khung PingPong xoay 180 độ và
+              mọi thứ như vậy miễn phá gạch và không rơi xuống vực nhưng bị đảo
+              ngược và có thêm thanh chắn ngang.
+            </p>
+            <p>
+              <strong>Level 3: </strong> Màn hình khung PingPong trở lại bình
+              thường và có thêm 3 thanh chắn ngang và 4 cánh cửa (gọi là doors)
+              sẽ chặn lại cho đến khi hp giảm xuống bằng 0 thì sẽ phá cửa.
+            </p>
+            <p>
+              <strong>Level 4: </strong> Đây là màn cuối với khung PingPong xoay
+              180 độ và lần này có thanh chắn ngang tốc độ dịch chuyển nhanh từ
+              trái sang phải và ngược lại.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              Đóng
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" tabindex="-1" id="info-game" data-bs-backdrop="false">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Thông tin trò chơi</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <h1>PING PONG BREAKOUT</h1>
+            <p>
+              Ping Pong Breakout là trò chơi điện tử giải trí lấy cảm hứng từ
+              thể loại Breakout cổ điển. Người chơi điều khiển thanh đỡ bóng ở
+              phía dưới màn hình để giữ bóng không rơi ra ngoài, đồng thời đưa
+              bóng va chạm vào các viên gạch phía trên để phá hủy chúng. Trong
+              quá trình chơi, người chơi cần quan sát hướng di chuyển của bóng,
+              điều chỉnh vị trí thanh đỡ một cách hợp lý và tận dụng các góc nảy
+              để phá được nhiều viên gạch nhất.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              Đóng
+            </button>
           </div>
         </div>
       </div>
