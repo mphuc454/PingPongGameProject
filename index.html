@@ -10,17 +10,184 @@
       integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="css/intro.css" />
+    <style>
+      body {
+        font-size: 1.5rem;
+        zoom: 0.9;
+        margin: 0;
+        display: flex;
+        min-height: 100vh;
+        justify-content: center;
+        align-items: center;
+      }
+      .right-side {
+        margin-left: 250px;
+        margin-top: 1%;
+      }
+      .btn-play {
+        width: 160px;
+        padding: 10px;
+        text-transform: uppercase;
+        font-weight: bold;
+        border-radius: 20px;
+        cursor: pointer;
+        -webkit-transition-duration: 0.3s;
+        transition-duration: 0.3s;
+        -webkit-transition-property: box-shadow, transform;
+        transition-property: box-shadow, transform;
+      }
+      .btn-play:hover,
+      .btn-play:focus,
+      .btn-play:active {
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+      }
+      .container-intro,
+      #intro-title {
+        text-align: center;
+      }
+      #intro-title {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+      }
+      .container-intro {
+        background-color: #0f172a;
+        border-radius: 10%;
+        padding: 25px;
+        color: #f8fafc;
+        border: 3px solid yellow;
+      }
+      #btn-intro .btn {
+        margin-top: 160px;
+        padding: 20px;
+        width: 50%;
+        font-size: 20px;
+      }
+    </style>
   </head>
   <body>
-    <div class="container-intro">
+    <div class="container-intro" id="intro">
       <div id="intro-title">
         <h1>CHÀO MỪNG BẠN ĐẾN</h1>
         <h3>GAME PING PONG</h3>
         <p>MSSV Thực hiện: <span>22130215</span></p>
       </div>
       <div id="btn-intro">
-        <a href="main.html?name=1" class="btn btn-light">BẮT ĐẦU</a>
+        <button id="btn-start" class="btn btn-light">BẮT ĐẦU</button>
+      </div>
+    </div>
+    <aside
+      class="position-fixed top-0 start-0 vh-100 bg-dark text-white"
+      id="sidebar-menu"
+      hidden
+    >
+      <div class="p-4 border-secondary">
+        <h4 class="mb-0 text-center">GAME PINGPONG</h4>
+      </div>
+      <nav class="nav flex-column p-3">
+        <a href="index.html?name=1" class="nav-link text-light mb-2">
+          Level 1
+        </a>
+        <a href="index.html?name=2" class="nav-link text-light mb-2">
+          Level 2
+        </a>
+        <a href="index.html?name=3" class="nav-link text-light mb-2">
+          Level 3
+        </a>
+        <a href="index.html?name=4" class="nav-link text-light mb-2">
+          Level 4
+        </a>
+        <a href="introduce.html" class="nav-link text-light mb-2">
+          Hướng dẫn trò chơi
+        </a>
+      </nav>
+    </aside>
+    <main class="right-side" id="game-play" hidden>
+      <div class="container-lg d-flex justify-content-center">
+        <div class="row title-game text-center w-100">
+          <div class="col" id="name-level"></div>
+          <div class="col">
+            <button
+              id="btn-pause"
+              type="button"
+              class="btn btn-secondary btn-play"
+            >
+              Tạm dừng
+            </button>
+          </div>
+          <div class="col" id="score-value"></div>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <div class="col-12 mt-4 d-flex justify-content-center">
+          <div id="main-game">
+            <canvas
+              id="ping-pong-map"
+              width="400"
+              height="500"
+              style="border: 2px solid black"
+            ></canvas>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div class="modal" tabindex="-1" id="gameover" data-bs-backdrop="false">
+      <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+            <h5 class="modal-title">BẠN ĐÃ THUA</h5>
+          </div>
+          <div class="modal-body">
+            <p>Bạn có muốn thử lại trò chơi này không?</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+              onclick="location.reload()"
+            >
+              Thử lại
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" tabindex="-1" id="winner" data-bs-backdrop="false">
+      <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+            <h5 class="modal-title">CHIẾN THẮNG</h5>
+          </div>
+          <div class="modal-body d-flex justify-content-center gap-2">
+            <p>Bạn đã hoàn thành màn chơi</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              id="next-level"
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+            >
+              Màn kế tiếp
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" tabindex="-1" id="countdown" data-bs-backdrop="false">
+      <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+            <h5 class="modal-title">THỜI GIAN CHỜ</h5>
+          </div>
+          <div class="modal-body d-flex justify-content-center gap-2">
+            <p>Trò chơi bắt đầu:</p>
+            <p id="time-down"></p>
+          </div>
+        </div>
       </div>
     </div>
     <script
@@ -28,5 +195,6 @@
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
+    <script src="game.js"></script>
   </body>
 </html>
