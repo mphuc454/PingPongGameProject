@@ -224,7 +224,7 @@ if (nameLevel !== null) {
           balls.y + balls.radius >= b.y &&
           balls.y - balls.radius < b.y &&
           balls.x + balls.radius >= b.x &&
-          balls.x - balls.radius < b.x + b.width
+          balls.x - balls.radius <= b.x + b.width
         ) {
           balls.y = b.y - balls.radius;
           balls.dy = -Math.abs(balls.dy);
@@ -233,7 +233,7 @@ if (nameLevel !== null) {
           balls.y - balls.radius <= b.y + b.height &&
           balls.y + balls.radius > b.y + b.height &&
           balls.x + balls.radius >= b.x &&
-          balls.x - balls.radius < b.x + b.width
+          balls.x - balls.radius <= b.x + b.width
         ) {
           balls.y = b.y + b.height + balls.radius;
           balls.dy = -balls.dy;
@@ -246,7 +246,7 @@ if (nameLevel !== null) {
           balls.y + balls.radius >= d.y &&
           balls.y - balls.radius < d.y &&
           balls.x + balls.radius >= d.x &&
-          balls.x - balls.radius < d.x + d.width
+          balls.x - balls.radius <= d.x + d.width
         ) {
           balls.y = d.y - balls.radius;
           d.hp--;
@@ -258,7 +258,7 @@ if (nameLevel !== null) {
           balls.y - balls.radius <= d.y + d.height &&
           balls.y + balls.radius > d.y + d.height &&
           balls.x + balls.radius >= d.x &&
-          balls.x - balls.radius < d.x + d.width
+          balls.x - balls.radius <= d.x + d.width
         ) {
           balls.y = d.y + d.height + balls.radius;
           d.hp--;
@@ -268,19 +268,21 @@ if (nameLevel !== null) {
     }
     if (nameLevel === "2") {
       if (
+        balls.dy > 0 &&
         balls.y + balls.radius >= lockedBlock.y &&
         balls.y - balls.radius < lockedBlock.y &&
         balls.x + balls.radius >= lockedBlock.x &&
-        balls.x - balls.radius < lockedBlock.x + lockedBlock.width
+        balls.x - balls.radius <= lockedBlock.x + lockedBlock.width
       ) {
         balls.y = lockedBlock.y - balls.radius;
         balls.dy = -Math.abs(balls.dy);
       }
       if (
+        balls.dy < 0 &&
         balls.y - balls.radius <= lockedBlock.y + lockedBlock.height &&
         balls.y + balls.radius > lockedBlock.y + lockedBlock.height &&
         balls.x + balls.radius >= lockedBlock.x &&
-        balls.x - balls.radius < lockedBlock.x + lockedBlock.width
+        balls.x - balls.radius <= lockedBlock.x + lockedBlock.width
       ) {
         balls.y = lockedBlock.y + lockedBlock.height + balls.radius;
         balls.dy = -balls.dy;
@@ -289,13 +291,14 @@ if (nameLevel !== null) {
 
     if (
       balls.y + balls.radius >= paddle.y &&
-      balls.y - balls.radius <= paddle.y &&
+      balls.y - balls.radius <= paddle.y + paddle.height &&
       balls.x + balls.radius >= paddle.x &&
       balls.x - balls.radius <= paddle.x + paddle.width
     ) {
-      balls.y = paddle.y - balls.radius;
       balls.dy = -Math.abs(balls.dy);
+      balls.y = paddle.y - balls.radius;
     }
+
     for (const block of blocks) {
       if (
         block.hp > 0 &&
@@ -313,19 +316,21 @@ if (nameLevel !== null) {
 
     if (nameLevel === "4") {
       if (
+        balls.dy > 0 &&
         balls.y + balls.radius >= lockedBlock2.y &&
         balls.y - balls.radius < lockedBlock2.y &&
         balls.x + balls.radius >= lockedBlock2.x &&
-        balls.x - balls.radius < lockedBlock2.x + lockedBlock2.width
+        balls.x - balls.radius <= lockedBlock2.x + lockedBlock2.width
       ) {
         balls.y = lockedBlock2.y - balls.radius;
         balls.dy = -Math.abs(balls.dy);
       }
       if (
+        balls.dy < 0 &&
         balls.y - balls.radius <= lockedBlock2.y + lockedBlock2.height &&
         balls.y + balls.radius > lockedBlock2.y + lockedBlock2.height &&
         balls.x + balls.radius >= lockedBlock2.x &&
-        balls.x - balls.radius < lockedBlock2.x + lockedBlock2.width
+        balls.x - balls.radius <= lockedBlock2.x + lockedBlock2.width
       ) {
         balls.y = lockedBlock2.y + lockedBlock2.height + balls.radius;
         balls.dy = -balls.dy;
