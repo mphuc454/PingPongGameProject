@@ -25,10 +25,10 @@ let listLockedBlocks = [
   { x: 280, y: 180, width: 80, height: 20 },
 ];
 let doors = [
-  { x: 0, y: 180, width: 40, height: 20, hp: 6 },
-  { x: 120, y: 180, width: 40, height: 20, hp: 6 },
-  { x: 240, y: 180, width: 40, height: 20, hp: 6 },
-  { x: 360, y: 180, width: 40, height: 20, hp: 6 },
+  { x: 0, y: 180, width: 40, height: 20, hp: 5 },
+  { x: 120, y: 180, width: 40, height: 20, hp: 5 },
+  { x: 240, y: 180, width: 40, height: 20, hp: 5 },
+  { x: 360, y: 180, width: 40, height: 20, hp: 5 },
 ];
 let blocks = [];
 for (let i = 0; i < 4; i++) {
@@ -81,7 +81,7 @@ if (nameLevel !== null) {
   if (Number(nameLevel) >= 4) {
     changeTextBtn.textContent = "Quay lại màn 1";
   }
-  document.getElementById("next-level")?.addEventListener("click", () => {
+  document.getElementById("next-level").addEventListener("click", () => {
     let nextLevel = Number(nameLevel) + 1;
     if (nextLevel >= 4) {
       location.href = "index.html?name=1";
@@ -118,57 +118,25 @@ if (nameLevel !== null) {
   function drawBlocks() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();
-    if (nameLevel === "4") {
-      ctx.translate(canvas.width, canvas.height);
-      ctx.rotate(Math.PI);
-      let grd = ctx.createLinearGradient(
-        lockedBlock2.x,
-        0,
-        lockedBlock2.x + lockedBlock2.width,
-        0,
-      );
-      grd.addColorStop(0, "#667eea");
-      grd.addColorStop(1, "#764ba2");
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = grd;
-      ctx.fillRect(
-        lockedBlock2.x,
-        lockedBlock2.y,
-        lockedBlock2.width,
-        lockedBlock2.height,
-      );
-      lockedBlock2.x += dx_lockedBlock;
-      if (
-        lockedBlock2.x + lockedBlock2.width >= canvas.width ||
-        lockedBlock2.x <= 0
-      ) {
-        dx_lockedBlock = -dx_lockedBlock;
-      }
-    }
     if (nameLevel === "2") {
       ctx.translate(canvas.width, canvas.height);
       ctx.rotate(Math.PI);
 
       let grd = ctx.createLinearGradient(
-        lockedBlock.x,
-        0,
-        lockedBlock.x + lockedBlock.width,
-        0,
+          lockedBlock.x,
+          0,
+          lockedBlock.x + lockedBlock.width,
+          0,
       );
       grd.addColorStop(0, "#667eea");
       grd.addColorStop(1, "#764ba2");
       ctx.fillStyle = grd;
       ctx.fillRect(
-        lockedBlock.x,
-        lockedBlock.y,
-        lockedBlock.width,
-        lockedBlock.height,
+          lockedBlock.x,
+          lockedBlock.y,
+          lockedBlock.width,
+          lockedBlock.height,
       );
-    }
-    ctx.fillStyle = "red";
-    for (const b of blocks) {
-      if (b.hp > 0) ctx.fillRect(b.x, b.y, b.width, b.height);
     }
 
     if (nameLevel === "3") {
@@ -190,9 +158,42 @@ if (nameLevel !== null) {
         }
       }
     }
-    ctx.fillStyle = "black";
+
+    if (nameLevel === "4") {
+      ctx.translate(canvas.width, canvas.height);
+      ctx.rotate(Math.PI);
+      let grd = ctx.createLinearGradient(
+        lockedBlock2.x,
+        0,
+        lockedBlock2.x + lockedBlock2.width,
+        0,
+      );
+      grd.addColorStop(0, "#667eea");
+      grd.addColorStop(1, "#764ba2");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = grd;
+      ctx.fillRect(
+        lockedBlock2.x,
+        lockedBlock2.y,
+        lockedBlock2.width,
+        lockedBlock2.height,
+      );
+      lockedBlock2.x += dx_lockedBlock;
+      if (
+        lockedBlock2.x + lockedBlock2.width >= canvas.width ||
+        lockedBlock2.x <= 0
+      ) {
+        dx_lockedBlock = -dx_lockedBlock;
+      }
+    }
+    ctx.fillStyle = "red";
+    for (const b of blocks) {
+      if (b.hp > 0) ctx.fillRect(b.x, b.y, b.width, b.height);
+    }
+
+    ctx.fillStyle = "#f6f34c";
     ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = "#090CB3";
     ctx.beginPath();
     ctx.arc(balls.x, balls.y, balls.radius, 0, Math.PI * 2);
     ctx.fill();
@@ -218,6 +219,29 @@ if (nameLevel !== null) {
     if (balls.y - balls.radius < 0) {
       balls.dy = -balls.dy;
     }
+    if (nameLevel === "2") {
+      if (
+          balls.dy > 0 &&
+          balls.y + balls.radius >= lockedBlock.y &&
+          balls.y - balls.radius < lockedBlock.y &&
+          balls.x + balls.radius >= lockedBlock.x &&
+          balls.x - balls.radius <= lockedBlock.x + lockedBlock.width
+      ) {
+        balls.y = lockedBlock.y - balls.radius;
+        balls.dy = -Math.abs(balls.dy);
+      }
+      if (
+          balls.dy < 0 &&
+          balls.y - balls.radius <= lockedBlock.y + lockedBlock.height &&
+          balls.y + balls.radius > lockedBlock.y + lockedBlock.height &&
+          balls.x + balls.radius >= lockedBlock.x &&
+          balls.x - balls.radius <= lockedBlock.x + lockedBlock.width
+      ) {
+        balls.y = lockedBlock.y + lockedBlock.height + balls.radius;
+        balls.dy = -balls.dy;
+      }
+    }
+
     if (nameLevel === "3") {
       for (const b of listLockedBlocks) {
         if (
@@ -264,28 +288,6 @@ if (nameLevel !== null) {
           d.hp--;
           balls.dy = -balls.dy;
         }
-      }
-    }
-    if (nameLevel === "2") {
-      if (
-        balls.dy > 0 &&
-        balls.y + balls.radius >= lockedBlock.y &&
-        balls.y - balls.radius < lockedBlock.y &&
-        balls.x + balls.radius >= lockedBlock.x &&
-        balls.x - balls.radius <= lockedBlock.x + lockedBlock.width
-      ) {
-        balls.y = lockedBlock.y - balls.radius;
-        balls.dy = -Math.abs(balls.dy);
-      }
-      if (
-        balls.dy < 0 &&
-        balls.y - balls.radius <= lockedBlock.y + lockedBlock.height &&
-        balls.y + balls.radius > lockedBlock.y + lockedBlock.height &&
-        balls.x + balls.radius >= lockedBlock.x &&
-        balls.x - balls.radius <= lockedBlock.x + lockedBlock.width
-      ) {
-        balls.y = lockedBlock.y + lockedBlock.height + balls.radius;
-        balls.dy = -balls.dy;
       }
     }
 
