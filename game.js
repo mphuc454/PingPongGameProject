@@ -47,6 +47,9 @@ const getGamePlay = document.getElementById("game-play");
 const getIntro = document.getElementById("intro");
 const getSidebar = document.getElementById("sidebar-menu");
 const getBtnStart = document.getElementById("btn-start");
+const getMusBtn = document.getElementById("music-btn");
+const audio = document.createElement("audio");
+audio.src = "/audio/musicaudio.mp3";
 const params = new URLSearchParams(window.location.search);
 const nameLevel = params.get("name");
 
@@ -89,26 +92,36 @@ if (nameLevel !== null) {
       location.href = `index.html?name=${nextLevel}`;
     }
   });
+  pause.innerHTML = '<i class="fa-solid fa-pause"></i>';
   document.getElementById("introduce").addEventListener("click", () => {
     isPause = !isPause;
-    pause.textContent = "RESUME";
+    pause.innerHTML = '<i class="fa-solid fa-play"></i>';
     introduce.show();
   });
   document.getElementById("info").addEventListener("click", () => {
     isPause = !isPause;
-    pause.textContent = "RESUME";
+    pause.innerHTML = '<i class="fa-solid fa-play"></i>';
     info.show();
   });
   pause.addEventListener("click", () => {
     isPause = !isPause;
     if (isPause) {
-      pause.textContent = "RESUME";
+      pause.innerHTML = '<i class="fa-solid fa-play"></i>';
     } else {
-      pause.textContent = "PAUSE";
+      pause.innerHTML = '<i class="fa-solid fa-pause"></i>';
       requestAnimationFrame(gameLoop);
     }
   });
-
+  getMusBtn.innerHTML = '<i class="fa-solid fa-play"></i> Bật âm thanh';
+  getMusBtn.addEventListener("click", () => {
+    if (!audio.paused) {
+      getMusBtn.innerHTML = '<i class="fa-solid fa-play"></i> Bật âm thanh';
+      audio.pause();
+    } else {
+      getMusBtn.innerHTML = '<i class="fa-solid fa-pause"></i> Tắt âm thanh';
+      audio.play();
+    }
+  });
   score.textContent = `Điểm ${scoreValue}`;
 
   const canvas = document.getElementById("ping-pong-map");
@@ -123,19 +136,19 @@ if (nameLevel !== null) {
       ctx.rotate(Math.PI);
 
       let grd = ctx.createLinearGradient(
-          lockedBlock.x,
-          0,
-          lockedBlock.x + lockedBlock.width,
-          0,
+        lockedBlock.x,
+        0,
+        lockedBlock.x + lockedBlock.width,
+        0,
       );
       grd.addColorStop(0, "#667eea");
       grd.addColorStop(1, "#764ba2");
       ctx.fillStyle = grd;
       ctx.fillRect(
-          lockedBlock.x,
-          lockedBlock.y,
-          lockedBlock.width,
-          lockedBlock.height,
+        lockedBlock.x,
+        lockedBlock.y,
+        lockedBlock.width,
+        lockedBlock.height,
       );
     }
 
@@ -221,21 +234,21 @@ if (nameLevel !== null) {
     }
     if (nameLevel === "2") {
       if (
-          balls.dy > 0 &&
-          balls.y + balls.radius >= lockedBlock.y &&
-          balls.y - balls.radius < lockedBlock.y &&
-          balls.x + balls.radius >= lockedBlock.x &&
-          balls.x - balls.radius <= lockedBlock.x + lockedBlock.width
+        balls.dy > 0 &&
+        balls.y + balls.radius >= lockedBlock.y &&
+        balls.y - balls.radius < lockedBlock.y &&
+        balls.x + balls.radius >= lockedBlock.x &&
+        balls.x - balls.radius <= lockedBlock.x + lockedBlock.width
       ) {
         balls.y = lockedBlock.y - balls.radius;
         balls.dy = -Math.abs(balls.dy);
       }
       if (
-          balls.dy < 0 &&
-          balls.y - balls.radius <= lockedBlock.y + lockedBlock.height &&
-          balls.y + balls.radius > lockedBlock.y + lockedBlock.height &&
-          balls.x + balls.radius >= lockedBlock.x &&
-          balls.x - balls.radius <= lockedBlock.x + lockedBlock.width
+        balls.dy < 0 &&
+        balls.y - balls.radius <= lockedBlock.y + lockedBlock.height &&
+        balls.y + balls.radius > lockedBlock.y + lockedBlock.height &&
+        balls.x + balls.radius >= lockedBlock.x &&
+        balls.x - balls.radius <= lockedBlock.x + lockedBlock.width
       ) {
         balls.y = lockedBlock.y + lockedBlock.height + balls.radius;
         balls.dy = -balls.dy;

@@ -10,6 +10,13 @@
       integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css"
+      integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <style>
       body {
         font-size: 1.5rem;
@@ -101,9 +108,10 @@
         <button class="mb-4 btn btn-success fw-bold" id="introduce">
           Hướng dẫn trò chơi
         </button>
-        <button class="btn btn-info fw-bold" id="info">
+        <button class="mb-4 btn btn-info fw-bold" id="info">
           Thông tin trò chơi
         </button>
+        <button class="mb-4 btn btn-warning fw-bold" id="music-btn"></button>
       </nav>
     </aside>
     <main class="right-side" id="game-play">
@@ -115,9 +123,7 @@
               id="btn-pause"
               type="button"
               class="btn btn-secondary btn-play"
-            >
-              PAUSE
-            </button>
+            ></button>
           </div>
           <div class="col" id="score-value"></div>
         </div>
