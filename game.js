@@ -60,6 +60,7 @@ let scoreValue = 0;
 let score = document.getElementById("score-value");
 let getCountDown = document.getElementById("time-down");
 let countdown = 3;
+let dx_lockedBlock = 6;
 
 const gameOver = new bootstrap.Modal(document.getElementById("gameover"));
 const gameWinner = new bootstrap.Modal(document.getElementById("winner"));
@@ -75,6 +76,10 @@ getSidebar.hidden = true;
 getBtnStart.addEventListener("click", () => {
   window.location.href = "index.html?name=1";
 });
+if (nameLevel === "4") {
+  balls.dx = 4;
+  balls.dy = 4;
+}
 
 if (nameLevel !== null) {
   getIntro.hidden = !getIntro.hidden;
@@ -126,7 +131,6 @@ if (nameLevel !== null) {
 
   const canvas = document.getElementById("ping-pong-map");
   const ctx = canvas.getContext("2d");
-  let dx_lockedBlock = 6;
 
   function drawBlocks() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
