@@ -15,6 +15,8 @@ window.addEventListener(
   },
   { passive: false },
 );
+const canvas = document.getElementById("ping-pong-map");
+
 let balls = { x: 200, y: 250, radius: 7, dx: 3, dy: -3 };
 let paddle = { x: 160, y: 350, width: 100, height: 30 };
 let lockedBlock = { x: 130, y: 180, width: 140, height: 20 };
@@ -34,9 +36,9 @@ let blocks = [];
 for (let i = 0; i < 4; i++) {
   for (let j = 0; j < 8; j++) {
     blocks.push({
-      x: 15 + j * 55,
+      x: (canvas.width - (8 * 45 + 7 * 5)) / 2 + j * (45 + 5),
       y: 15 + i * 25,
-      width: 50,
+      width: 45,
       height: 20,
       hp: 1,
     });
@@ -129,7 +131,6 @@ if (nameLevel !== null) {
   });
   score.textContent = `Điểm ${scoreValue}`;
 
-  const canvas = document.getElementById("ping-pong-map");
   const ctx = canvas.getContext("2d");
 
   function drawBlocks() {
@@ -328,7 +329,7 @@ if (nameLevel !== null) {
       ) {
         block.hp = 0;
         balls.dy = -balls.dy;
-        scoreValue = Math.min(scoreValue + 10, 300);
+        scoreValue += 10;
         score.textContent = `Điểm ${scoreValue}`;
       }
     }
@@ -368,7 +369,7 @@ if (nameLevel !== null) {
       gameOver.show();
       return;
     }
-    if (scoreValue >= 300) {
+    if (scoreValue >= 320) {
       gameWinner.show();
       return;
     }
