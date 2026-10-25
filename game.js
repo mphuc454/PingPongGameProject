@@ -33,12 +33,18 @@ let doors = [
   { x: 360, y: 180, width: 40, height: 20, hp: 5 },
 ];
 let blocks = [];
-for (let i = 0; i < 4; i++) {
-  for (let j = 0; j < 8; j++) {
+const widthBricks = 45;
+const colsBricks = 8;
+const rowsBricks = 4;
+const gapBricks = 5;
+const totalW =
+  canvas.width - (colsBricks * widthBricks + (colsBricks - 1) * gapBricks);
+for (let rows = 0; rows < rowsBricks; rows++) {
+  for (let cols = 0; cols < colsBricks; cols++) {
     blocks.push({
-      x: (canvas.width - (8 * 45 + 7 * 5)) / 2 + j * (45 + 5),
-      y: 15 + i * 25,
-      width: 45,
+      x: totalW / 2 + cols * (widthBricks + gapBricks),
+      y: 15 + rows * 25,
+      width: widthBricks,
       height: 20,
       hp: 1,
     });
